@@ -4,7 +4,6 @@ defmodule Cafeteria.Product do
   @type t :: %__MODULE__{
           code: String.t(),
           name: String.t(),
-          # NOTE: Maybe an integer or decimal?
           price: Coin.t()
         }
 
