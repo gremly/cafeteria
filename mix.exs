@@ -22,7 +22,8 @@ defmodule Cafeteria.MixProject do
   defp deps do
     [
       {:uuid, "~> 1.1"},
-      {:decimal, "~> 2.1"}
+      {:decimal, "~> 2.1"},
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
     ]
   end
 end

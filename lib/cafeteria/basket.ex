@@ -5,7 +5,9 @@ defmodule Cafeteria.Basket do
   checked out.
   """
 
+  alias Cafeteria.Coin
   alias Cafeteria.Product
+  alias Cafeteria.Pricing
   alias Cafeteria.Store
 
   @type items :: %{
@@ -37,6 +39,30 @@ defmodule Cafeteria.Basket do
       error ->
         error
     end
+  end
+
+  @spec checkout(t(), map()) :: Coin.t()
+  def checkout(basket, discount_rules) do
+    gross_price = get_gross_price(basket.items)
+    discount = get_discounts(basket.items, discount_rules)
+
+    Coin.sub(gross_price, discount)
+  end
+
+  @spec get_gross_price(items()) :: Coin.t()
+  def get_gross_price(basket_items) do
+    Enum.reduce(basket_items, Coin.new("0"), fn {_code, {product, quantity}}, total ->
+      product.price |> Coin.mult(quantity) |> Coin.add(total)
+    end)
+  end
+
+  @spec get_discounts(items(), map()) :: Coin.t()
+  def get_discounts(basket_items, discount_rules) do
+    Enum.reduce(basket_items, Coin.new("0"), fn {_code, {product, quantity}}, total ->
+      product
+      |> Pricing.get_discounts(quantity, discount_rules)
+      |> Coin.add(total)
+    end)
   end
 
   # Internal Functions

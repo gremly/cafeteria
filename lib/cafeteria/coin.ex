@@ -9,8 +9,8 @@ defmodule Cafeteria.Coin do
   defstruct amount: Decimal.new("0"), currency: :GBP
 
   @spec new(String.t()) :: t()
-  def new(amount) do
-    %__MODULE__{amount: Decimal.new(amount)}
+  def new(amount, currency \\ :GBP) do
+    %__MODULE__{amount: Decimal.new(amount), currency: currency}
   end
 
   @spec add(t(), t()) :: t()
