@@ -1,4 +1,8 @@
 defmodule Cafeteria.Coin do
+  @module """
+  Module to perform money operation with decimals.
+  """
+
   alias Decimal
 
   @type t :: %__MODULE__{
@@ -45,5 +49,10 @@ defmodule Cafeteria.Coin do
 
   def mult(amount_a, %__MODULE__{amount: amount_b}) do
     %__MODULE__{amount: Decimal.mult(amount_a, amount_b)}
+  end
+
+  @spec round(t(), Integer.t(), atom()) :: Decimal.t()
+  def round(%__MODULE__{amount: amount}, digits \\ 0, mode \\ :half_up) do
+    new(Decimal.round(amount, digits, mode))
   end
 end

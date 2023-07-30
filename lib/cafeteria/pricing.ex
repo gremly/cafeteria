@@ -36,7 +36,7 @@ defmodule Cafeteria.Pricing do
 
   defp apply_discount_rule(%{type: :bulk_rate, min_quantity: min} = rule, price, quantity)
        when min <= quantity do
-    price |> Coin.mult(rule.rate) |> Coin.mult(quantity)
+    price |> Coin.mult(rule.rate) |> Coin.mult(quantity) |> Coin.round(2)
   end
 
   defp apply_discount_rule(_rule, _price, _qty), do: Coin.new("0")

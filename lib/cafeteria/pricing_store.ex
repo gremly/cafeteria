@@ -13,7 +13,7 @@ defmodule Cafeteria.PricingStore do
   @discount_rules %{
     "GR1" => %{type: :free_items, pay: 1, get: 1},
     "SR1" => %{type: :bulk_fixed, min_quantity: 3, new_price: Coin.new("4.50")},
-    "CF1" => %{type: :bulk_percentage, min_quantity: 3, rate: 1 - 2 / 3}
+    "CF1" => %{type: :bulk_rate, min_quantity: 3, rate: 1 - 2 / 3}
   }
 
   @doc """

@@ -68,7 +68,7 @@ defmodule Cafeteria.PricingTest do
       }
 
       pricing_rules = %{"SR1" => %{type: :bulk_rate, min_quantity: 3, rate: 0.1}}
-      assert Pricing.get_discounts(product, 3, pricing_rules) == Coin.new("1.500")
+      assert Pricing.get_discounts(product, 3, pricing_rules) == Coin.new("1.50")
     end
 
     test "apply bulk_percentage discount for minimum quantity" do
