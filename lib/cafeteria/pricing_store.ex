@@ -1,18 +1,19 @@
 defmodule Cafeteria.PricingStore do
   @moduledoc """
   Basic storage to manage discount rules dinamically.
-  It might need to be extended to use an external store system
+  It might need to be extended to use an external storage system
   like a DB.
   """
 
+  alias Cafeteria.Coin
   alias Cafeteria.Product
   alias Cafeteria.Store
 
+  # NOTE: Will be removed once an external storage gets implemented
   @discount_rules %{
     "GR1" => %{type: :free_items, pay: 1, get: 1},
-    "SR1" => %{type: :bulk_fixed, min_quantity: 3, new_price: 4.50},
-    # NOTE: s/percentage/fraction ?
-    "CF1" => %{type: :bulk_percentage, min_quantity: 3, percentage: 1 - 2 / 3}
+    "SR1" => %{type: :bulk_fixed, min_quantity: 3, new_price: Coin.new("4.50")},
+    "CF1" => %{type: :bulk_percentage, min_quantity: 3, rate: 1 - 2 / 3}
   }
 
   @doc """

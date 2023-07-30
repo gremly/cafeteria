@@ -2,7 +2,7 @@ defmodule Cafeteria.Basket do
   @moduledoc """
   The main container to hold the status
   and products that are going to be
-  checkout.
+  checked out.
   """
 
   alias Cafeteria.Product

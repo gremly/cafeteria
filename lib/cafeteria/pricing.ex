@@ -4,12 +4,17 @@ defmodule Cafeteria.Pricing do
   @doc """
   Return the applicable discount if there is a rule defined to
   the given product and product quantity.
+
+  Three type of pricing rules are supported
+  - Pay x get y -> type: free_items
+  - Bulk discount with fixed price -> type: bulk_fixed
+  - Bulk discount with perctage / rate -> type: bulk_rate
   """
   @spec get_discounts(Product.t(), number(), map()) :: map()
   def get_discounts(product, product_qty, pricing_rules) do
     case pricing_rules[product.code] do
       nil ->
-        %Coin{amount: 0, currency: product.price.currency}
+        Coin.new("0")
 
       rule ->
         apply_pricing_rule(rule, product.price, product_qty)
@@ -20,21 +25,18 @@ defmodule Cafeteria.Pricing do
 
   defp apply_pricing_rule(%{type: :free_items} = rule, price, quantity) do
     for_free = div(quantity, rule.pay + rule.get)
-    amount = for_free * price.amount
-    %Coin{amount: amount, currency: price.currency}
+    Coin.mult(for_free, price)
   end
 
   defp apply_pricing_rule(%{type: :bulk_fixed, min_quantity: min} = rule, price, quantity)
        when min <= quantity do
-    amount = (price.amount - rule.new_price) * quantity
-    %Coin{amount: amount, currency: price.currency}
+    price |> Coin.sub(rule.new_price) |> Coin.mult(quantity)
   end
 
-  defp apply_pricing_rule(%{type: :bulk_percentage, min_quantity: min} = rule, price, quantity)
+  defp apply_pricing_rule(%{type: :bulk_rate, min_quantity: min} = rule, price, quantity)
        when min <= quantity do
-    amount = price.amount * rule.percentage * quantity
-    %Coin{amount: amount, currency: price.currency}
+    price |> Coin.mult(rule.rate) |> Coin.mult(quantity)
   end
 
-  defp apply_pricing_rule(_, price, _), do: %Coin{amount: 0.0, currency: price.currency}
+  defp apply_pricing_rule(_rule, _price, _qty), do: Coin.new("0")
 end

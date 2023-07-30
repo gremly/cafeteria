@@ -14,17 +14,17 @@ defmodule Cafeteria.Store do
     "GR1" => %Product{
       code: "GR1",
       name: "Green tea",
-      price: %Coin{amount: 3.11}
+      price: Coin.new("3.11")
     },
     "SR1" => %Product{
       code: "SR1",
       name: "Strawberries",
-      price: %Coin{amount: 5.00}
+      price: Coin.new("5.00")
     },
     "CF1" => %Product{
       code: "CF1",
       name: "Coffee",
-      price: %Coin{amount: 11.23}
+      price: Coin.new("11.23")
     }
   }
 

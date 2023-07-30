@@ -11,83 +11,78 @@ defmodule Cafeteria.PricingTest do
       product = %Product{
         code: "GR1",
         name: "Green tea",
-        price: %Coin{amount: 3.11, currency: :GBP}
+        price: Coin.new("3.11")
       }
 
-      assert %Coin{amount: 0, currency: :GBP} == Pricing.get_discounts(product, 3, %{})
+      assert Pricing.get_discounts(product, 3, %{}) == Coin.new("0")
     end
 
     test "apply pay 1 get 2 discount" do
       product = %Product{
         code: "GR1",
         name: "Green tea",
-        price: %Coin{amount: 3.11, currency: :GBP}
+        price: Coin.new("3.11")
       }
 
       pricing_rules = %{"GR1" => %{type: :free_items, pay: 1, get: 1}}
 
-      assert %Coin{amount: 0.0, currency: :GBP} = Pricing.get_discounts(product, 1, pricing_rules)
-
-      assert %Coin{amount: 3.11, currency: :GBP} =
-               Pricing.get_discounts(product, 2, pricing_rules)
-
-      assert %Coin{amount: 6.22, currency: :GBP} =
-               Pricing.get_discounts(product, 5, pricing_rules)
-
-      assert %Coin{amount: 18.66, currency: :GBP} =
-               Pricing.get_discounts(product, 12, pricing_rules)
+      assert Pricing.get_discounts(product, 1, pricing_rules) == Coin.new("0.00")
+      assert Pricing.get_discounts(product, 2, pricing_rules) == Coin.new("3.11")
+      assert Pricing.get_discounts(product, 5, pricing_rules) == Coin.new("6.22")
+      assert Pricing.get_discounts(product, 12, pricing_rules) == Coin.new("18.66")
     end
 
     test "apply bulk_fixed discount" do
       product = %Product{
         code: "SR1",
         name: "Strawberries",
-        price: %Coin{amount: 5.00, currency: :GBP}
+        price: Coin.new("5.00")
       }
 
-      pricing_rules = %{"SR1" => %{type: :bulk_fixed, min_quantity: 3, new_price: 4.50}}
+      pricing_rules = %{
+        "SR1" => %{type: :bulk_fixed, min_quantity: 3, new_price: Coin.new("4.50")}
+      }
 
-      assert %Coin{amount: 1.50, currency: :GBP} ==
-               Pricing.get_discounts(product, 3, pricing_rules)
+      assert Pricing.get_discounts(product, 3, pricing_rules) == Coin.new("1.50")
     end
 
     test "apply bulk_fixed discount for minimum quantity" do
       product = %Product{
         code: "SR1",
         name: "Strawberries",
-        price: %Coin{amount: 5.00, currency: :GBP}
+        price: Coin.new("5.00")
       }
 
-      pricing_rules = %{"SR1" => %{type: :bulk_fixed, min_quantity: 3, new_price: 4.50}}
+      pricing_rules = %{
+        "SR1" => %{type: :bulk_fixed, min_quantity: 3, new_price: Coin.new("4.50")}
+      }
 
-      assert %Coin{amount: 0.00, currency: :GBP} ==
-               Pricing.get_discounts(product, 2, pricing_rules)
+      assert Pricing.get_discounts(product, 2, pricing_rules) == Coin.new("0")
     end
 
-    test "apply bulk_percentage discount" do
+    test "apply bulk_rate discount" do
       product = %Product{
         code: "SR1",
         name: "Strawberries",
-        price: %Coin{amount: 5.00, currency: :GBP}
+        price: Coin.new("5.00")
       }
 
-      pricing_rules = %{"SR1" => %{type: :bulk_percentage, min_quantity: 3, percentage: 0.1}}
-
-      assert %Coin{amount: 1.50, currency: :GBP} ==
-               Pricing.get_discounts(product, 3, pricing_rules)
+      pricing_rules = %{"SR1" => %{type: :bulk_rate, min_quantity: 3, rate: 0.1}}
+      assert Pricing.get_discounts(product, 3, pricing_rules) == Coin.new("1.500")
     end
 
     test "apply bulk_percentage discount for minimum quantity" do
       product = %Product{
         code: "SR1",
         name: "Strawberries",
-        price: %Coin{amount: 5.00, currency: :GBP}
+        price: Coin.new("5.00")
       }
 
-      pricing_rules = %{"SR1" => %{type: :bulk_percentage, min_quantity: 3, new_price: 4.50}}
+      pricing_rules = %{
+        "SR1" => %{type: :bulk_percentage, min_quantity: 3, new_price: Decimal.new("4.50")}
+      }
 
-      assert %Coin{amount: 0.00, currency: :GBP} ==
-               Pricing.get_discounts(product, 2, pricing_rules)
+      assert Pricing.get_discounts(product, 2, pricing_rules) == Coin.new("0")
     end
   end
 end

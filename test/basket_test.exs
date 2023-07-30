@@ -15,7 +15,7 @@ defmodule Cafeteria.BasketTest do
       refute is_nil(basket.id)
 
       assert %Product{code: "GR1", name: "Green tea", price: price} = product
-      assert %Coin{amount: 3.11, currency: :GBP} = price
+      assert price == Coin.new("3.11")
     end
 
     test "add two products by code to the given basket" do
