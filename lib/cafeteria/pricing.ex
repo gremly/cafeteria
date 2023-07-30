@@ -24,5 +24,17 @@ defmodule Cafeteria.Pricing do
     %Coin{amount: amount, currency: price.currency}
   end
 
+  defp apply_pricing_rule(%{type: :bulk_fixed, min_quantity: min} = rule, price, quantity)
+       when min <= quantity do
+    amount = (price.amount - rule.new_price) * quantity
+    %Coin{amount: amount, currency: price.currency}
+  end
+
+  defp apply_pricing_rule(%{type: :bulk_percentage, min_quantity: min} = rule, price, quantity)
+       when min <= quantity do
+    amount = price.amount * rule.percentage * quantity
+    %Coin{amount: amount, currency: price.currency}
+  end
+
   defp apply_pricing_rule(_, price, _), do: %Coin{amount: 0.0, currency: price.currency}
 end
