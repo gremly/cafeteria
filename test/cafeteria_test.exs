@@ -1,8 +1,6 @@
 defmodule CafeteriaTest do
   use ExUnit.Case
-  doctest Cafeteria
 
-  alias Cafeteria.Basket
   alias Cafeteria.Coin
   alias Cafeteria.PricingStore
 
@@ -12,8 +10,8 @@ defmodule CafeteriaTest do
       product_codes = ["GR1", "SR1", "GR1", "GR1", "CF1"]
 
       basket =
-        Enum.reduce(product_codes, Basket.new(), fn product_code, basket ->
-          {:ok, basket} = Basket.scan(basket, product_code)
+        Enum.reduce(product_codes, Cafeteria.basket_create(), fn product_code, basket ->
+          {:ok, basket} = Cafeteria.scan_product(basket, product_code)
           basket
         end)
 
@@ -25,8 +23,8 @@ defmodule CafeteriaTest do
       product_codes = ["GR1", "GR1"]
 
       basket =
-        Enum.reduce(product_codes, Basket.new(), fn product_code, basket ->
-          {:ok, basket} = Basket.scan(basket, product_code)
+        Enum.reduce(product_codes, Cafeteria.basket_create(), fn product_code, basket ->
+          {:ok, basket} = Cafeteria.scan_product(basket, product_code)
           basket
         end)
 
@@ -38,8 +36,8 @@ defmodule CafeteriaTest do
       product_codes = ["SR1", "SR1", "GR1", "SR1"]
 
       basket =
-        Enum.reduce(product_codes, Basket.new(), fn product_code, basket ->
-          {:ok, basket} = Basket.scan(basket, product_code)
+        Enum.reduce(product_codes, Cafeteria.basket_create(), fn product_code, basket ->
+          {:ok, basket} = Cafeteria.scan_product(basket, product_code)
           basket
         end)
 
@@ -51,8 +49,8 @@ defmodule CafeteriaTest do
       product_codes = ["GR1", "CF1", "SR1", "CF1", "CF1"]
 
       basket =
-        Enum.reduce(product_codes, Basket.new(), fn product_code, basket ->
-          {:ok, basket} = Basket.scan(basket, product_code)
+        Enum.reduce(product_codes, Cafeteria.basket_create(), fn product_code, basket ->
+          {:ok, basket} = Cafeteria.scan_product(basket, product_code)
           basket
         end)
 

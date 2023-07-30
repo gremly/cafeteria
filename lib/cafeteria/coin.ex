@@ -1,5 +1,5 @@
 defmodule Cafeteria.Coin do
-  @module """
+  @moduledoc """
   Module to perform money operation with decimals.
   """
 

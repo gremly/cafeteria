@@ -9,7 +9,7 @@ defmodule Cafeteria.Pricing do
   Three type of discount rules are supported
   - Pay x get y -> type: free_items
   - Bulk discount with fixed price -> type: bulk_fixed
-  - Bulk discount with perctage / rate -> type: bulk_rate
+  - Bulk discount with percentage / rate -> type: bulk_rate
   """
   @spec get_discounts(Product.t(), number(), map()) :: map()
   def get_discounts(product, product_qty, discount_rules) do

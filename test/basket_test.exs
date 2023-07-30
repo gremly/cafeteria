@@ -1,6 +1,5 @@
 defmodule Cafeteria.BasketTest do
   use ExUnit.Case
-  doctest Cafeteria
 
   alias Cafeteria.Basket
   alias Cafeteria.Coin

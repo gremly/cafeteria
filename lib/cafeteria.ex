@@ -7,6 +7,16 @@ defmodule Cafeteria do
   alias Cafeteria.Basket
   alias Cafeteria.Coin
 
+  @spec basket_create() :: {:ok, Basket.t()}
+  def basket_create() do
+    Basket.new()
+  end
+
+  @spec scan_product(Basket.t(), String.t()) :: {:ok, Basket.t()} | {:error, atom()}
+  def scan_product(basket, product_code) do
+    Basket.scan(basket, product_code)
+  end
+
   @doc """
   The process of checking out an open basket involves
   calculating the net price of the purchase, which

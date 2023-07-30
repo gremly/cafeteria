@@ -1,6 +1,5 @@
 defmodule Cafeteria.PricingTest do
   use ExUnit.Case
-  doctest Cafeteria
 
   alias Cafeteria.Coin
   alias Cafeteria.Pricing
