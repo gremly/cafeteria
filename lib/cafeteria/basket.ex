@@ -1,19 +1,24 @@
 defmodule Cafeteria.Basket do
   @moduledoc """
-  The main container to hold the status of
-  the order while is created.
+  The main container to hold the status
+  and products that are going to be
+  checkout.
   """
 
-  alias Cafeteria.Coin
   alias Cafeteria.Product
+  alias Cafeteria.Store
+
+  @type items :: %{
+          String.t() => {Product.t(), quantity :: number()}
+        }
 
   @type t :: %__MODULE__{
           id: String.t(),
-          products: [Product.t()],
+          items: items(),
           status: :open | :closed
         }
 
-  defstruct [:id, products: [], status: :open]
+  defstruct [:id, items: %{}, status: :open]
 
   @spec new :: t()
   def new do
@@ -22,9 +27,11 @@ defmodule Cafeteria.Basket do
 
   @spec scan(t(), String.t()) :: {:ok, t()} | {:error, atom()}
   def scan(basket, product_code) do
-    case get_product(product_code) do
-      {:ok, product} ->
-        basket = %__MODULE__{basket | products: [product | basket.products]}
+    case Store.get_product(product_code) do
+      {:ok, %Product{} = product} ->
+        items = update_items(basket.items, product)
+
+        basket = %__MODULE__{basket | items: items}
         {:ok, basket}
 
       error ->
@@ -34,18 +41,11 @@ defmodule Cafeteria.Basket do
 
   # Internal Functions
 
-  defp get_product(product_code) do
-    product_store = %{
-      "GR1" => %Product{
-        code: "GR1",
-        name: "Green tea",
-        price: %Coin{amount: 3.11, currency: "GBP"}
-      }
-    }
-
-    case product_store[product_code] do
-      nil -> {:error, :product_not_found}
-      product -> {:ok, product}
-    end
+  defp update_items(items, product) do
+    item = update_item(items[product.code], product)
+    Map.put(items, product.code, item)
   end
+
+  defp update_item(nil, product), do: {product, 1}
+  defp update_item({product, quantity}, _product), do: {product, quantity + 1}
 end
